@@ -3,7 +3,7 @@ const { DEFAULT_VOLUME } = require("../utility/util");
 module.exports = {
     create_queue(msg){
         const queue = {};
-        queue.textChannel = msg.channel;
+        queue.text_channel = msg.channel;
         queue.channel = msg.member.voice.channel;
         queue.connection = null;
         queue.waiting_list = [];

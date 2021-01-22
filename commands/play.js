@@ -17,8 +17,9 @@ module.exports = {
             var server = msg.client.queue.get(msg.guild.id);
             // console.info(server.songs);
             server.dispatcher = server.connection.play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}));
-            server.waiting_list.shift();
+            
             server.dispatcher.on("finish", function(){
+                server.waiting_list.shift();
                 if (server.waiting_list[0]){
                     play(msg);
                 }else{
@@ -49,7 +50,7 @@ module.exports = {
 
         if (current_server) {
             current_server.waiting_list.push(song);
-            return current_server.textChannel
+            return current_server.text_channel
             .send(`✅ **${song.title}** has been added to the queue by ${msg.author}`)
             .catch(console.error);
         }
