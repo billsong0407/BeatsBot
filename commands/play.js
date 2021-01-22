@@ -1,8 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
-const { DEFAULT_VOLUME } = require("../utility/util");
-
-// let { queue } = require('../utility/queue');
+const { queue } = require('../utility/queue');
 
 module.exports = {
     name: "$play",
@@ -10,15 +8,8 @@ module.exports = {
     async execute(msg, args) {
         const voice_channel = msg.member.voice.channel;
         const serverQueue = msg.client.queue.get(msg.guild.id);
-        const queueConstruct = {
-            textChannel: msg.channel,
-            channel: msg.member.voice.channel,
-            connection: null,
-            songs: [],
-            loop: false,
-            volume: DEFAULT_VOLUME || 100,
-            playing: true
-        };
+        queue.textChannel = msg.channel;
+        queue.channel = msg.member.voice.channel;
         url = args[0];
 
         function play(msg){
@@ -31,7 +22,7 @@ module.exports = {
                 if (servers.songs[0]){
                     play(msg);
                 }else{
-                    queueConstruct.connection.disconnect();
+                    server.connection.disconnect();
                 }
             })
         }
@@ -71,12 +62,12 @@ module.exports = {
             .catch(console.error);
         }
 
-        queueConstruct.songs.push(song);
-        msg.client.queue.set(msg.guild.id, queueConstruct);
+        queue.songs.push(song);
+        msg.client.queue.set(msg.guild.id, queue);
 
         try {
-            queueConstruct.connection = await voice_channel.join();
-            await queueConstruct.connection.voice.setSelfDeaf(false);
+            queue.connection = await voice_channel.join();
+            await queue.connection.voice.setSelfDeaf(false);
             play(msg);
         } catch (error) {
             console.error(error);

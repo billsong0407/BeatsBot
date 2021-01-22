@@ -2,7 +2,6 @@ const { Client, Collection } = require("discord.js");
 const { readdirSync } = require("fs");
 const { join } = require("path");
 const { TOKEN, PREFIX } = require("./utility/util");
-const ytdl = require('ytdl-core');
 
 const Discord = require('discord.js');
 const client = new Client();
@@ -16,8 +15,6 @@ for (const file of commandFiles) {
   const command = require(join(__dirname, "commands", `${file}`));
   client.commands.set(command.name, command);
 }
-
-var servers = {};
 
 client.once('ready', () =>{
     console.log(`${client.user.username} ready!`);
