@@ -10,6 +10,7 @@ module.exports = {
         const voice_channel = msg.member.voice.channel;
         const serverQueue = msg.client.queue.get(msg.guild.id);
         queue = create_queue(msg);
+        
         url = args[0];
 
         function play(msg){
@@ -17,10 +18,9 @@ module.exports = {
             var server = msg.client.queue.get(msg.guild.id);
             console.info(server.songs);
             server.dispatcher = server.connection.play(ytdl(server.songs[0].url, {filter: "audioonly"}));
-            // server.songs.shift();
+            server.songs.shift();
             server.dispatcher.on("finish", function(){
-                if (servers.songs[0]){
-                    server.songs.shift();
+                if (server.songs[0]){
                     play(msg);
                 }else{
                     server.connection.disconnect();
