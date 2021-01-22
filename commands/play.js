@@ -23,7 +23,9 @@ module.exports = {
                 if (server.waiting_list[0]){
                     play(msg);
                 }else{
+                    msg.client.queue.delete(msg.guild.id)
                     server.connection.disconnect();
+                    return
                 }
             })
         }
