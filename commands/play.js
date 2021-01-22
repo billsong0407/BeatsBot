@@ -4,7 +4,7 @@ const { create_queue } = require('../utility/queue');
 const { create_song } = require('../utility/song');
 
 module.exports = {
-    name: "$play",
+    name: "play",
     description: "plays music",
     async execute(msg, args) {
         const voice_channel = msg.member.voice.channel;
@@ -15,7 +15,7 @@ module.exports = {
         function play(msg){
             console.info("playing");
             var server = msg.client.queue.get(msg.guild.id);
-            // console.info(server.songs[0]);
+            console.info(server.songs);
             server.dispatcher = server.connection.play(ytdl(server.songs[0].url, {filter: "audioonly"}));
             // server.songs.shift();
             server.dispatcher.on("finish", function(){
