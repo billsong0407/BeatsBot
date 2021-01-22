@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
-const { create_queue } = require('../utility/queue');
+const { create_queue } = require('../utility/server');
 const { create_song } = require('../utility/song');
 
 module.exports = {
@@ -8,19 +8,18 @@ module.exports = {
     description: "plays music",
     async execute(msg, args) {
         const voice_channel = msg.member.voice.channel;
-        const serverQueue = msg.client.queue.get(msg.guild.id);
-        queue = create_queue(msg);
-        
-        url = args[0];
+        const current_server = msg.client.queue.get(msg.guild.id);
+        server = create_queue(msg);
+
+        song_url = args[0];
 
         function play(msg){
-            console.info("playing");
             var server = msg.client.queue.get(msg.guild.id);
-            console.info(server.songs);
-            server.dispatcher = server.connection.play(ytdl(server.songs[0].url, {filter: "audioonly"}));
-            server.songs.shift();
+            // console.info(server.songs);
+            server.dispatcher = server.connection.play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}));
+            server.waiting_list.shift();
             server.dispatcher.on("finish", function(){
-                if (server.songs[0]){
+                if (server.waiting_list[0]){
                     play(msg);
                 }else{
                     server.connection.disconnect();
@@ -42,24 +41,24 @@ module.exports = {
         }
 
         try {
-            song = create_song(await ytdl.getInfo(url));
+            song = create_song(await ytdl.getInfo(song_url));
         } catch (error) {
             console.error(error);
             return msg.reply(error.msg).catch(console.error);
         }
 
-        if (serverQueue) {
-            serverQueue.songs.push(song);
-            return serverQueue.textChannel
+        if (current_server) {
+            current_server.waiting_list.push(song);
+            return current_server.textChannel
             .send(`✅ **${song.title}** has been added to the queue by ${msg.author}`)
             .catch(console.error);
         }
-        queue.songs.push(song);
-        msg.client.queue.set(msg.guild.id, queue);
+        server.waiting_list.push(song);
+        msg.client.queue.set(msg.guild.id, server);
 
         try {
-            queue.connection = await voice_channel.join();
-            await queue.connection.voice.setSelfDeaf(false);
+            if (voice_channel) server.connection = await voice_channel.join();
+            await server.connection.voice.setSelfDeaf(true);
             play(msg);
         } catch (error) {
             console.error(error);

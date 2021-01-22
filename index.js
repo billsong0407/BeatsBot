@@ -17,7 +17,7 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () =>{
-    console.log(`${client.user.username} ready!`);
+    console.log(`${client.user.username} is online!`);
     client.user.setActivity(`${PREFIX}help and ${PREFIX}play`, { type: "LISTENING" });
 });
 
