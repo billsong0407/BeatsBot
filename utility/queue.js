@@ -1,13 +1,15 @@
 const { DEFAULT_VOLUME } = require("../utility/util");
 
 module.exports = {
-    queue: {
-        textChannel: null,
-        channel: null,
-        connection: null,
-        songs: [],
-        loop: false,
-        volume: DEFAULT_VOLUME || 100,
-        playing: true
+    create_queue(msg){
+        const queue = {};
+        queue.textChannel = msg.channel;
+        queue.channel = msg.member.voice.channel;
+        queue.connection = null;
+        queue.songs = [];
+        queue.loop = false;
+        queue.volume = DEFAULT_VOLUME || 100;
+        queue.playing = true;
+        return queue;
     },
-};
+}
