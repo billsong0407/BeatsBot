@@ -1,4 +1,4 @@
-const { DEFAULT_VOLUME } = require("../utility/util");
+const { DEFAULT_VOLUME } = require("./util");
 
 module.exports = {
     create_queue(msg){

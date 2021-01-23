@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
-const { create_queue } = require('../utility/server');
+const { create_queue } = require('../utility/queue');
 const { create_song } = require('../utility/song');
 
 module.exports = {
