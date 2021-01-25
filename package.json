@@ -4,6 +4,7 @@
   "description": "An discord AI that plays music in the background",
   "main": "index.js",
   "scripts": {
+    "start": "node ./index.js",
     "test": "jest ./test"
   },
   "author": "Bill Song",
