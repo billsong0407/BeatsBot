@@ -1,0 +1,17 @@
+module.exports = {
+  name: "resume",
+  description: "Resume currently paused song",
+  execute(message) {
+    const current_server = message.client.servers.get(message.guild.id);
+    if (!current_server) return message.reply("There is nothing playing.").catch(console.error);
+    if (message.member.voice != message.member.guild.voice.channelID) return message.reply("You must join a voice channel first");
+
+    if (!current_server.playing) {
+      current_server.playing = true;
+      current_server.connection.dispatcher.resume();
+      return current_server.text_channel.send(`${message.author} ▶ resumed the music!`).catch(console.error);
+    }
+
+    return message.reply("The queue is not paused.").catch(console.error);
+  }
+};
