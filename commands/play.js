@@ -8,13 +8,13 @@ module.exports = {
     description: "plays music",
     async execute(msg, args) {
         const voice_channel = msg.member.voice.channel;
-        const current_server = msg.client.queue.get(msg.guild.id);
+        const current_server = msg.client.servers.get(msg.guild.id);
         server = create_queue(msg);
 
         song_url = args[0];
 
         function play(msg){
-            var server = msg.client.queue.get(msg.guild.id);
+            var server = msg.client.servers.get(msg.guild.id);
             // console.info(server.songs);
             server.dispatcher = server.connection.play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}));
             
@@ -23,7 +23,7 @@ module.exports = {
                 if (server.waiting_list[0]){
                     play(msg);
                 }else{
-                    msg.client.queue.delete(msg.guild.id)
+                    msg.client.servers.delete(msg.guild.id)
                     server.connection.disconnect();
                     return
                 }
@@ -57,7 +57,7 @@ module.exports = {
             .catch(console.error);
         }
         server.waiting_list.push(song);
-        msg.client.queue.set(msg.guild.id, server);
+        msg.client.servers.set(msg.guild.id, server);
 
         try {
             if (voice_channel) server.connection = await voice_channel.join();
@@ -65,7 +65,7 @@ module.exports = {
             play(msg);
         } catch (error) {
             console.error(error);
-            msg.client.queue.delete(msg.guild.id);
+            msg.client.servers.delete(msg.guild.id);
             await channel.leave();
             return msg.channel.send(`Could not join the channel: ${error}`).catch(console.error);
         }

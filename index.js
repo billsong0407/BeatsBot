@@ -8,7 +8,7 @@ const client = new Client();
 
 client.login(TOKEN)
 client.commands = new Collection();
-client.queue = new Map();
+client.servers = new Map();
 
 const commandFiles = readdirSync(join(__dirname, "commands")).filter((file) => file.endsWith(".js"));
 for (const file of commandFiles) {
