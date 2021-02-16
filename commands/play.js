@@ -19,13 +19,22 @@ module.exports = {
             server.dispatcher = server.connection.play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}));
             
             server.dispatcher.on("finish", function(){
-                server.waiting_list.shift();
-                if (server.waiting_list[0]){
-                    play(msg);
-                }else{
-                    msg.client.servers.delete(msg.guild.id)
-                    server.connection.disconnect();
-                    return
+                if (server.loop) {
+                    // if loop is on, push the song back at the end of the queue
+                    // so it can repeat endlessly
+                    let lastSong = server.waiting_list.shift();
+                    server.waiting_list.push(lastSong);
+                    play(msg)
+                } else {
+                    // Recursively play the next song
+                    server.waiting_list.shift();
+                    if (server.waiting_list[0]){
+                        play(msg);
+                    }else{
+                        msg.client.servers.delete(msg.guild.id)
+                        server.connection.disconnect();
+                        return
+                    }
                 }
             })
         }
