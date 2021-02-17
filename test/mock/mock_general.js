@@ -21,7 +21,7 @@ const Message = {
     client: null,
     guild: null,
     channel: null,
-    author: "Bill",
+    author: "TestUser1",
     reply(content){
         this.channel.content = content;
     }
