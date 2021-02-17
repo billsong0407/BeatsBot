@@ -7,7 +7,8 @@ module.exports = {
             msg.reply("Currently no music playing!");
         }else{
             song = current_server.waiting_list[0];
-            current_server.connection.dispatcher.end();
+            current_server.playing = true;
+            current_server.connection.dispatcher.end(); 
             current_server.text_channel.send(`${msg.author} skipped ${song.title}`);
         }
         return;
