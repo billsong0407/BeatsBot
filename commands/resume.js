@@ -3,8 +3,8 @@ module.exports = {
   description: "Resume currently paused song",
   execute(message) {
     const current_server = message.client.servers.get(message.guild.id);
-    if (!current_server) return message.reply("⚠️ There is nothing playing.").catch(console.error);
-    if (message.member.voice.channelID != message.member.guild.voice.channelID) return message.reply("⚠️ You must join a voice channel first");
+    if (!current_server) return message.send(`⚠️ ${message.author} There is nothing playing.`).catch(console.error);
+    if (message.member.voice.channelID != message.member.guild.voice.channelID) return message.send(`⚠${message.author} You must join a voice channel first!`);
 
     if (!current_server.playing) {
       current_server.playing = true;
