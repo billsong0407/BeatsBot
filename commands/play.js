@@ -45,7 +45,7 @@ module.exports = {
         const permission_list = msg.member.voice.channel.permissionsFor(msg.client.user);
 
         if (!permission_list.has("CONNECT") || !permission_list.has("SPEAK")){
-            return msg.reply("I do not have the correct permissions to use it")
+            return msg.reply("❌ I do not have the correct permissions to use it")
         }
 
         if (!args.length){
@@ -62,7 +62,7 @@ module.exports = {
         if (current_server) {
             current_server.waiting_list.push(song);
             return current_server.text_channel
-            .send(`✅ **${song.title}** has been added to the queue by ${msg.author}`)
+            .send(`🎶 **${song.title}** has been added to the queue by ${msg.author}`)
             .catch(console.error);
         }
         server.waiting_list.push(song);
@@ -76,7 +76,7 @@ module.exports = {
             console.error(error);
             msg.client.servers.delete(msg.guild.id);
             await channel.leave();
-            return msg.channel.send(`Could not join the channel: ${error}`).catch(console.error);
+            return msg.channel.send(`❌ Could not join the channel: ${error}`).catch(console.error);
         }
 
         

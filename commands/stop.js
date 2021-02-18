@@ -4,11 +4,11 @@ module.exports = {
     execute(msg, args){
         const current_server = msg.client.servers.get(msg.guild.id);
         if (!current_server || !current_server.connection.dispatcher){
-            msg.reply("Currently no music playing!");
+            msg.reply("⚠️ Currently no music playing!");
         }else{
             current_server.waiting_list = [];
             current_server.connection.dispatcher.end();
-            current_server.text_channel.send(`${msg.author} stopped playing music!`);
+            current_server.text_channel.send(`⏹️ ${msg.author} stopped playing music!`);
         }
         return;
     },

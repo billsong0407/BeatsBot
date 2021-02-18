@@ -29,13 +29,13 @@ describe('test skip command', ()=>{
         skip(msg);
         expect(client.servers.get(1234).waiting_list.length).toBe(1);
         expect(client.servers.get(1234).waiting_list[0].title).toBe("Frozen");
-        expect(channel.content).toBe("TestUser1 skipped Jingle Bell");
+        expect(channel.content).toBe("⏭️ TestUser1 skipped Jingle Bell");
     });
     test('skip 2 songs', ()=>{
         skip(msg);
-        expect(channel.content).toBe("TestUser1 skipped Jingle Bell");
+        expect(channel.content).toBe("⏭️ TestUser1 skipped Jingle Bell");
         skip(msg);
-        expect(channel.content).toBe("TestUser1 skipped Frozen");
+        expect(channel.content).toBe("⏭️ TestUser1 skipped Frozen");
         expect(client.servers.get(1234).waiting_list.length).toBe(0);
     });
 })
