@@ -16,27 +16,35 @@ module.exports = {
         function play(msg){
             var server = msg.client.servers.get(msg.guild.id);
             // console.info(server.songs);
-            server.dispatcher = server.connection.play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}));
-            
-            server.dispatcher.on("finish", function(){
-                if (server.loop) {
-                    // if loop is on, push the song back at the end of the queue
-                    // so it can repeat endlessly
-                    let lastSong = server.waiting_list.shift();
-                    server.waiting_list.push(lastSong);
-                    play(msg)
-                } else {
-                    // Recursively play the next song
-                    server.waiting_list.shift();
-                    if (server.waiting_list[0]){
-                        play(msg);
-                    }else{
-                        msg.client.servers.delete(msg.guild.id)
-                        server.connection.disconnect();
-                        return
+            // server.dispatcher = server.connection.play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}));
+            if (!server.waiting_list[0].url) return;
+            const dispatcher = server.connection
+                .play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}))
+                .on("finish", function(){
+                    if (server.loop) {
+                        // if loop is on, push the song back at the end of the queue
+                        // so it can repeat endlessly
+                        let lastSong = server.waiting_list.shift();
+                        server.waiting_list.push(lastSong);
+                        play(msg)
+                    } else {
+                        // Recursively play the next song
+                        server.waiting_list.shift();
+                        if (server.waiting_list[0]){
+                            play(msg);
+                        }else{
+                            msg.client.servers.delete(msg.guild.id)
+                            server.connection.disconnect();
+                            // return
+                        }
                     }
-                }
-            })
+                })
+                .on("error", (err) => {
+                    console.error(err);
+                    server.waiting_list.shift();
+                    play(msg)
+                });
+                dispatcher.setVolumeLogarithmic(server.volume / 100);
         }
 
         if (!voice_channel) {
