@@ -3,7 +3,7 @@ const ytSearch = require('yt-search');
 const { create_queue } = require('../utility/queue');
 const { create_song } = require('../utility/song');
 
-function play(msg){
+async function play(msg){
     var server = msg.client.servers.get(msg.guild.id);
     if (!server.waiting_list[0].url) return;
     const dispatcher = server.connection
@@ -28,8 +28,106 @@ function play(msg){
             console.error(err);
             server.waiting_list.shift();
             play(msg)
-        });
+        })
+        .on("disconnect", () => msg.client.servers.delete(msg.guild.id));
     dispatcher.setVolumeLogarithmic(server.volume / 100);
+
+    current_song = server.waiting_list[0];
+
+    try {
+        var music_GUI = await server.text_channel.send(`Currently playing: **${current_song.title}** ${current_song.url}`);
+        await music_GUI.react("⏭");
+        await music_GUI.react("⏯");
+        await music_GUI.react("🔇");
+        await music_GUI.react("🔉");
+        await music_GUI.react("🔊");
+        await music_GUI.react("🔁");
+        await music_GUI.react("⏹");
+    } catch (error) {
+        console.error(error);
+    }
+
+    const filter = (reaction, user) => user.id !== msg.client.user.id;
+    var collector = music_GUI.createReactionCollector(filter, {
+      time: current_song.duration > 0 ? current_song.duration * 1000 : 600000
+    });
+
+    collector.on("collect", (reaction, user) => {
+        if (!server) return;
+        const member = msg.guild.member(user);
+        if (member.voice.channelID !== member.guild.voice.channelID) {
+            member.send("You need to join the voice channel first!").catch(console.error);
+            return;
+        }
+
+      switch (reaction.emoji.name) {
+        case "⏭":
+          server.playing = true;
+          reaction.users.remove(user).catch(console.error);
+        //   if (!canModifyQueue(member)) return;
+          server.connection.dispatcher.end();
+          server.text_channel.send(`${user} ⏩ skipped the song`).catch(console.error);
+          collector.stop();
+          break;
+
+        case "⏯":
+          reaction.users.remove(user).catch(console.error);
+        //   if (!canModifyQueue(member)) return;
+          if (server.playing) {
+            server.playing = !server.playing;
+            server.connection.dispatcher.pause(true);
+            server.text_channel.send(`${user} ⏸ paused the music.`).catch(console.error);
+          } else {
+            server.playing = !server.playing;
+            server.connection.dispatcher.resume();
+            server.text_channel.send(`${user} ▶ resumed the music!`).catch(console.error);
+          }
+          break;
+
+        case "🔁":
+          reaction.users.remove(user).catch(console.error);
+        //   if (!canModifyQueue(member)) return;
+          server.loop = !server.loop;
+          server.text_channel.send(`Loop is now ${server.loop ? "**on**" : "**off**"}`).catch(console.error);
+          break;
+
+        case "⏹":
+          reaction.users.remove(user).catch(console.error);
+        //   if (!canModifyQueue(member)) return;
+          server.waiting_list = [];
+          server.text_channel.send(`${user} ⏹ stopped the music!`).catch(console.error);
+          try {
+            server.connection.dispatcher.end();
+          } catch (error) {
+            console.error(error);
+            server.connection.disconnect();
+          }
+          collector.stop();
+          break;
+
+        default:
+          reaction.users.remove(user).catch(console.error);
+          break;
+      }
+    });
+
+    let config;
+
+    try {
+      config = require("../config.json");
+    } catch (error) {
+      config = null;
+    }
+
+    const PRUNING = config ? config.PRUNING : process.env.PRUNING;
+
+    collector.on("end", () => {
+      music_GUI.reactions.removeAll().catch(console.error);
+      if (PRUNING && music_GUI && !music_GUI.deleted) {
+        music_GUI.delete({ timeout: 3000 }).catch(console.error);
+      }
+    });
+
     return;
 }
 
@@ -45,7 +143,7 @@ module.exports = {
         }
 
         if (!args.length){
-            return message
+            return msg
             .reply(`You need to add a keyword or YouTube URL`)
             .catch(console.error);
         }
