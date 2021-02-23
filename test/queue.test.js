@@ -1,4 +1,4 @@
-const { create_queue } = require('../utility/queue');
+const { create_server } = require('../utility/server');
 
 test("test song object construction", () => {
     const msg = {};
@@ -8,7 +8,7 @@ test("test song object construction", () => {
     msg.channel = null;
     msg.member = member;
     msg.member.voice = voice;
-    server = create_queue(msg);
+    server = create_server(msg);
     expect(server.text_channel).toBe(null);
     expect(server.volume).toBe(100);
 });

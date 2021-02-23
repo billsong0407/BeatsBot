@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
 const ytSearch = require('yt-search');
-const { create_queue } = require('../utility/queue');
+const { create_server } = require('../utility/server');
 const { create_song } = require('../utility/song');
 
 async function play(msg){
@@ -165,7 +165,7 @@ module.exports = {
       .send(`🎶 **${song.title}** has been added to the queue by ${msg.author}`)
       .catch(console.error);
     }else{
-      server = create_queue(msg);
+      server = create_server(msg);
       server.waiting_list.push(song);
       msg.client.servers.set(msg.guild.id, server);
     }
