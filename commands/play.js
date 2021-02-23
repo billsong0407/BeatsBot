@@ -4,61 +4,61 @@ const { create_queue } = require('../utility/queue');
 const { create_song } = require('../utility/song');
 
 async function play(msg){
-    var server = msg.client.servers.get(msg.guild.id);
-    if (!server.waiting_list[0].url) return;
-    const dispatcher = server.connection
-        .play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}))
-        .on("finish", function(){
-            if (server.loop) {
-                // if loop is on, push the song back at the end of the queue
-                let lastSong = server.waiting_list.shift();
-                server.waiting_list.push(lastSong);
-                play(msg)
-            } else {
-                server.waiting_list.shift();
-                if (server.waiting_list[0]){
-                    play(msg);
-                }else{
-                    msg.client.servers.delete(msg.guild.id)
-                    server.connection.disconnect();
-                }
-            }
-        })
-        .on("error", (err) => {
-            console.error(err);
-            server.waiting_list.shift();
+  var server = msg.client.servers.get(msg.guild.id);
+  if (!server.waiting_list[0].url) return;
+  const dispatcher = server.connection
+    .play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}))
+    .on("finish", function(){
+        if (server.loop) {
+            // if loop is on, push the song back at the end of the queue
+            let lastSong = server.waiting_list.shift();
+            server.waiting_list.push(lastSong);
             play(msg)
-        })
-        .on("disconnect", () => msg.client.servers.delete(msg.guild.id));
-    dispatcher.setVolumeLogarithmic(server.volume / 100);
-
-    current_song = server.waiting_list[0];
-
-    try {
-        var music_GUI = await server.text_channel.send(`Currently playing: **${current_song.title}** ${current_song.url}`);
-        await music_GUI.react("⏭");
-        await music_GUI.react("⏯");
-        await music_GUI.react("🔇");
-        await music_GUI.react("🔉");
-        await music_GUI.react("🔊");
-        await music_GUI.react("🔁");
-        await music_GUI.react("⏹");
-    } catch (error) {
-        console.error(error);
-    }
-
-    const filter = (reaction, user) => user.id !== msg.client.user.id;
-    var collector = music_GUI.createReactionCollector(filter, {
-      time: current_song.duration > 0 ? current_song.duration * 1000 : 600000
-    });
-
-    collector.on("collect", (reaction, user) => {
-        if (!server) return;
-        const member = msg.guild.member(user);
-        if (member.voice.channelID !== member.guild.voice.channelID) {
-            member.send("You need to join the voice channel first!").catch(console.error);
-            return;
+        } else {
+            server.waiting_list.shift();
+            if (server.waiting_list[0]){
+                play(msg);
+            }else{
+                msg.client.servers.delete(msg.guild.id)
+                server.connection.disconnect();
+            }
         }
+    })
+    .on("error", (err) => {
+        console.error(err);
+        server.waiting_list.shift();
+        play(msg)
+    })
+    .on("disconnect", () => msg.client.servers.delete(msg.guild.id));
+  dispatcher.setVolumeLogarithmic(server.volume / 100);
+
+  current_song = server.waiting_list[0];
+
+  try {
+    var music_GUI = await server.text_channel.send(`Currently playing: **${current_song.title}** ${current_song.url}`);
+    await music_GUI.react("⏭");
+    await music_GUI.react("⏯");
+    await music_GUI.react("🔇");
+    await music_GUI.react("🔉");
+    await music_GUI.react("🔊");
+    await music_GUI.react("🔁");
+    await music_GUI.react("⏹");
+  } catch (error) {
+      console.error(error);
+  }
+
+  const filter = (reaction, user) => user.id !== msg.client.user.id;
+  var collector = music_GUI.createReactionCollector(filter, {
+    time: current_song.duration > 0 ? current_song.duration * 1000 : 600000
+  });
+
+  collector.on("collect", (reaction, user) => {
+    if (!server) return;
+    const member = msg.guild.member(user);
+    if (member.voice.channelID !== member.guild.voice.channelID) {
+        member.send("You need to join the voice channel first!").catch(console.error);
+        return;
+    }
 
       switch (reaction.emoji.name) {
         case "⏭":
@@ -154,14 +154,15 @@ module.exports = {
         const permission_list = msg.member.voice.channel.permissionsFor(msg.client.user);
 
         if (!permission_list.has("CONNECT") || !permission_list.has("SPEAK")){
-            return msg.reply("❌ I do not have the correct permissions to use it")
+          return msg.reply("❌ I do not have the correct permissions to use it")
         }
 
         try {
-            song = create_song(await ytdl.getInfo(song_url));
+          console.log(msg.author);
+          song = create_song(await ytdl.getInfo(song_url), msg.author.username);
         } catch (error) {
-            console.error(error);
-            return msg.reply(error.msg).catch(console.error);
+          console.error(error);
+          return msg.reply(error.msg).catch(console.error);
         }
 
         if (current_server) {
