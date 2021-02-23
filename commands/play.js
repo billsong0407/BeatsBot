@@ -153,7 +153,6 @@ module.exports = {
     }
 
     try {
-      console.log(msg.author);
       song = create_song(await ytdl.getInfo(song_url), msg.author.username);
     } catch (error) {
       console.error(error);
