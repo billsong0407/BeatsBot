@@ -1,12 +1,15 @@
 const createBar = require("string-progressbar");
-const { MessageEmbed } = require("discord.js");
+const { validate_queue } = require("../utility/validation")
 
 module.exports = {
   name: "nowplaying",
   description: "Show the current playing song",
   execute(message) {
+    let check = validate_queue(message);
+    if (check != "success")
+      return message.channel.send(check).catch(console.error);
+
     const server = message.client.servers.get(message.guild.id);
-    if (!server) return message.reply("There is nothing playing.").catch(console.error);
 
     const song = server.waiting_list[0];
     const seek = (server.connection.dispatcher.streamTime - server.connection.dispatcher.pausedTime) / 1000;
