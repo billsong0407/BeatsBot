@@ -5,7 +5,8 @@ const { create_song } = require('../utility/song');
 
 async function play(msg){
   var server = msg.client.servers.get(msg.guild.id);
-  if (!server.waiting_list[0].url) return;
+  if (!server.waiting_list) return;
+  // if (typeof server.waiting_list[0].url !== 'undefined') return;
   const dispatcher = server.connection
     .play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}))
     .on("finish", function(){
@@ -34,7 +35,7 @@ async function play(msg){
   current_song = server.waiting_list[0];
 
   try {
-    var music_GUI = await server.text_channel.send(`Currently playing: **${current_song.title}**`);
+    var music_GUI = await server.text_channel.send(`🎶 Currently playing: **${current_song.title}**`);
     await music_GUI.react("⏭");
     await music_GUI.react("⏯");
     await music_GUI.react("🔇");
@@ -55,7 +56,7 @@ async function play(msg){
     if (!server) return;
     const member = msg.guild.member(user);
     if (member.voice.channelID !== member.guild.voice.channelID) {
-      member.send("You need to join the voice channel first!").catch(console.error);
+      member.send("${user} - ❌ You need to join the voice channel first!").catch(console.error);
       return;
     }
 
@@ -64,7 +65,7 @@ async function play(msg){
       server.playing = true;
       reaction.users.remove(user).catch(console.error);
       server.connection.dispatcher.end();
-      server.text_channel.send(`${user} ⏩ skipped the song`).catch(console.error);
+      server.text_channel.send(`${user} - ⏩ skipped the song`).catch(console.error);
       collector.stop();
       break;
 
@@ -73,11 +74,11 @@ async function play(msg){
       if (server.playing) {
         server.playing = !server.playing;
         server.connection.dispatcher.pause(true);
-        server.text_channel.send(`${user} ⏸ paused the music.`).catch(console.error);
+        server.text_channel.send(`${user} - ⏸ paused the music.`).catch(console.error);
       } else {
         server.playing = !server.playing;
         server.connection.dispatcher.resume();
-        server.text_channel.send(`${user} ▶ resumed the music!`).catch(console.error);
+        server.text_channel.send(`${user} - ▶ resumed the music!`).catch(console.error);
       }
       break;
 
@@ -90,7 +91,7 @@ async function play(msg){
     case "⏹":
       reaction.users.remove(user).catch(console.error);
       server.waiting_list = [];
-      server.text_channel.send(`${user} ⏹ stopped the music!`).catch(console.error);
+      server.text_channel.send(`${user} - ⏹ stopped the music!`).catch(console.error);
       try {
         server.connection.dispatcher.end();
       } catch (error) {

@@ -12,5 +12,5 @@ exports.validate_voice_channel = (message) => {
     if (message.member.voice.channelID != message.member.guild.voice.channelID) 
         return `${message.author} - ${emoji.warning} You must join a voice channel first!`;
     else
-        return "sucess";
+        return "success";
 }
