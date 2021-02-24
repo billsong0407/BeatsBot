@@ -1,15 +1,17 @@
+const { validate_queue } = require("../utility/validation")
+
 module.exports = {
     name: 'stop',
     description: 'stop playing music',
-    execute(msg, args){
+    execute(message, args){
         let check = validate_queue(message);
         if (check != "success")
         return message.channel.send(check).catch(console.error);
 
-        const current_server = msg.client.servers.get(msg.guild.id);
+        const current_server = message.client.servers.get(message.guild.id);
         current_server.waiting_list = [];
         current_server.loop = false;
         current_server.connection.dispatcher.end();
-        return current_server.text_channel.send(`⏹️ ${msg.author} stopped playing music!`);
+        return current_server.text_channel.send(`${message.author} - ⏹️ stopped playing music!`);
     },
 };

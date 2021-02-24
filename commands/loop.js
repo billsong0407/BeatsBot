@@ -14,6 +14,6 @@ module.exports = {
     const current_server = message.client.servers.get(message.guild.id);
     current_server.loop = !current_server.loop;
     song = current_server.waiting_list[0];
-    return current_server.text_channel.send(`${current_server.loop ? "🔄" : "🛑"} Loop is ${current_server.loop ? "**enabled** 🔄" : "**diabled** 🛑"} for ${song.title}`).catch(console.error);
+    return current_server.text_channel.send(`${message.author} - ${current_server.loop ? "🔄" : "🛑"} Loop is ${current_server.loop ? "**enabled**" : "**diabled**"} for ${song.title}`).catch(console.error);
   }
 };

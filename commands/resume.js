@@ -15,7 +15,7 @@ module.exports = {
     if (!current_server.playing) {
       current_server.playing = true;
       current_server.connection.dispatcher.resume();
-      return current_server.text_channel.send(`▶️ ${message.author} resumed the music!`).catch(console.error);
+      return current_server.text_channel.send(`${message.author} - ▶️ resumed the music!`).catch(console.error);
     }
     return message.reply("The music is still playing.").catch(console.error);
   }
