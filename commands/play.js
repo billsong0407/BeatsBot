@@ -34,7 +34,7 @@ async function play(msg){
   current_song = server.waiting_list[0];
 
   try {
-    var music_GUI = await server.text_channel.send(`Currently playing: **${current_song.title}** ${current_song.url}`);
+    var music_GUI = await server.text_channel.send(`Currently playing: **${current_song.title}**`);
     await music_GUI.react("⏭");
     await music_GUI.react("⏯");
     await music_GUI.react("🔇");
@@ -129,56 +129,56 @@ async function play(msg){
 module.exports = {
   name: "play",
   description: "plays music",
-  async execute(msg, args) {
-    const voice_channel = msg.member.voice.channel;
-    const current_server = msg.client.servers.get(msg.guild.id);
+  async execute(message, args) {
+    const voice_channel = message.member.voice.channel;
+    const current_server = message.client.servers.get(message.guild.id);
 
     if (!voice_channel) {
-        return msg.reply("You need to join a voice channel first!");
+        return message.reply(" - ❌ You need to join a voice channel first!");
     }
 
     if (!args.length){
-        return msg
-        .reply(`You need to add a keyword or YouTube URL`)
+        return message
+        .reply(` - ❌ You need to add a keyword or an YouTube URL`)
         .catch(console.error);
     }
     
     song_url = args[0];
 
     
-    const permission_list = msg.member.voice.channel.permissionsFor(msg.client.user);
+    const permission_list = message.member.voice.channel.permissionsFor(message.client.user);
 
     if (!permission_list.has("CONNECT") || !permission_list.has("SPEAK")){
-      return msg.reply("❌ I do not have the correct permissions to use it")
+      return message.reply(" - ❌ I do not have the correct permissions to use it")
     }
 
     try {
-      song = create_song(await ytdl.getInfo(song_url), msg.author.username);
+      song = create_song(await ytdl.getInfo(song_url), message.author.username);
     } catch (error) {
       console.error(error);
-      return msg.reply(error.msg).catch(console.error);
+      return message.reply(error.msg).catch(console.error);
     }
 
     if (current_server) {
       current_server.waiting_list.push(song);
       return current_server.text_channel
-      .send(`🎶 **${song.title}** has been added to the queue by ${msg.author}`)
+      .send(`🎶 **${song.title}** has been added to the queue by ${message.author}`)
       .catch(console.error);
     }else{
-      server = create_server(msg);
+      server = create_server(message);
       server.waiting_list.push(song);
-      msg.client.servers.set(msg.guild.id, server);
+      message.client.servers.set(message.guild.id, server);
     }
     
     try {
       if (voice_channel) server.connection = await voice_channel.join();
       await server.connection.voice.setSelfDeaf(true);
-      play(msg);
+      play(message);
     } catch (error) {
       console.error(error);
-      msg.client.servers.delete(msg.guild.id);
+      message.client.servers.delete(message.guild.id);
       await channel.leave();
-      return msg.channel.send(`❌ Could not join the channel: ${error}`).catch(console.error);
+      return message.channel.send(` - ❌ Could not join the channel: ${error}`).catch(console.error);
     }
     // const connection = await voice_channel.join();
     // const videoFinder = async(query) =>{
