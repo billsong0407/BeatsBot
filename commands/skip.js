@@ -1,16 +1,17 @@
+const { validate_queue } = require("../utility/validation")
+
 module.exports = {
     name: 'skip',
     description: 'skip a song',
-    execute(msg, args){
-        const current_server = msg.client.servers.get(msg.guild.id);
-        if (!current_server){
-            msg.channel.send(`⚠️ ${msg.author} Currently no music playing!`);
-        }else{
-            song = current_server.waiting_list[0];
-            current_server.playing = true;
-            current_server.connection.dispatcher.end(); 
-            current_server.text_channel.send(`⏭️ ${msg.author} skipped ${song.title}`);
-        }
-        return;
+    execute(message, args){
+        let check = validate_queue(message);
+        if (check != "success")
+            return message.channel.send(check);
+
+        const current_server = message.client.servers.get(message.guild.id);
+        song = current_server.waiting_list[0];
+        current_server.playing = true;
+        current_server.connection.dispatcher.end(); 
+        return current_server.text_channel.send(`${message.author} - ⏭️ skipped ${song.title}`);
     },
 };
