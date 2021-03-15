@@ -166,18 +166,43 @@ module.exports = {
         console.error(error);
         return message.reply(error.message).catch(console.error);
       }
-    }
-
-    if (song_info){
+    }else{
       try {
-        song = create_song(song_info, message.author.username);
+        keyword = args.join('');
+        
+        const video_results = await ytSearch(keyword);
+        // console.log(video_results.videos[0]);
+        if (video_results.videos.length >= 1){
+          song_info = video_results.videos[0];
+          song = {
+            requested_by: message.author.username,
+            title: song_info.title,
+            artist: song_info.author.name,
+            view_count: song_info.views,
+            avg_rating: "N/A",
+            url: song_info.url,
+            duration: song_info.seconds,
+          };
+        }else{
+          song_info = null;
+          return message.reply("No content found!")
+        }
       } catch (error) {
         console.error(error);
-        return message.reply(error.msg).catch(console.error);
+        return message.reply(error.message).catch(console.error);
       }
-    }else{
-      return message.reply("No content found!")
     }
+
+    // if (song_info){
+    //   try {
+    //     song = create_song(song_info, message.author.username);
+    //   } catch (error) {
+    //     console.error(error);
+    //     return message.reply(error.msg).catch(console.error);
+    //   }
+    // }else{
+    //   return message.reply("No content found!")
+    // }
     
 
     if (current_server) {
