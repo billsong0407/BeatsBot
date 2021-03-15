@@ -6,7 +6,7 @@ const { create_song } = require('../utility/song');
 async function play(msg){
   var server = msg.client.servers.get(msg.guild.id);
   if (!server.waiting_list) return;
-  // if (typeof server.waiting_list[0].url !== 'undefined') return;
+  
   const dispatcher = server.connection
     .play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}))
     .on("finish", function(){
@@ -129,7 +129,7 @@ async function play(msg){
 
 module.exports = {
   name: "play",
-  description: "plays music",
+  description: "plays music through keyword search or YouTube link",
   async execute(message, args) {
     const voice_channel = message.member.voice.channel;
     const current_server = message.client.servers.get(message.guild.id);
@@ -144,7 +144,7 @@ module.exports = {
         .catch(console.error);
     }
     
-    song_url = args[0];
+    
 
     
     const permission_list = message.member.voice.channel.permissionsFor(message.client.user);
@@ -153,12 +153,32 @@ module.exports = {
       return message.reply(" - ❌ I do not have the correct permissions to use it")
     }
 
-    try {
-      song = create_song(await ytdl.getInfo(song_url), message.author.username);
-    } catch (error) {
-      console.error(error);
-      return message.reply(error.msg).catch(console.error);
+    song_url = args[0];
+    const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
+
+    const urlValid = videoPattern.test(args[0]);
+
+    if (urlValid) {
+      try {
+        song_info = await ytdl.getInfo(song_url);
+        song = create_song(song_info, message.author.username);
+      } catch (error) {
+        console.error(error);
+        return message.reply(error.message).catch(console.error);
+      }
     }
+
+    if (song_info){
+      try {
+        song = create_song(song_info, message.author.username);
+      } catch (error) {
+        console.error(error);
+        return message.reply(error.msg).catch(console.error);
+      }
+    }else{
+      return message.reply("No content found!")
+    }
+    
 
     if (current_server) {
       current_server.waiting_list.push(song);
