@@ -5,7 +5,7 @@ function skip_to(server, index){
 
     if (server.loop) {
         for (let i = 0; i < index - 2; i++) {
-            server.waiting_list.push(queue.songs.shift());
+            server.waiting_list.push(server.waiting_list.shift());
         }
         } else {
         server.waiting_list = server.waiting_list.slice(index - 2);
