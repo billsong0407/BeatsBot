@@ -193,18 +193,6 @@ module.exports = {
       }
     }
 
-    // if (song_info){
-    //   try {
-    //     song = create_song(song_info, message.author.username);
-    //   } catch (error) {
-    //     console.error(error);
-    //     return message.reply(error.msg).catch(console.error);
-    //   }
-    // }else{
-    //   return message.reply("No content found!")
-    // }
-    
-
     if (current_server) {
       current_server.waiting_list.push(song);
       return current_server.text_channel
@@ -226,9 +214,5 @@ module.exports = {
       await channel.leave();
       return message.channel.send(` - ❌ Could not join the channel: ${error}`).catch(console.error);
     }
-    // const connection = await voice_channel.join();
-    // const videoFinder = async(query) =>{
-    //     const video_result
-    // }
   },
 };
