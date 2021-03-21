@@ -90,11 +90,10 @@ async function play(msg){
 
     case "🔉":
       reaction.users.remove(user).catch(console.error);
-      if (!canModifyQueue(member) || server.volume == 0) return;
       if (server.volume - 10 <= 0) server.volume = 0;
       else server.volume = server.volume - 10;
       server.connection.dispatcher.setVolumeLogarithmic(server.volume / 100);
-      server.textChannel
+      server.text_channel
         .send(`${user} 🔉 decreased the volume, the volume is now ${server.volume}%`)
         .catch(console.error);
       break;
@@ -177,9 +176,6 @@ module.exports = {
         .reply(` - ❌ You need to add a keyword or an YouTube URL`)
         .catch(console.error);
     }
-    
-    
-
     
     const permission_list = message.member.voice.channel.permissionsFor(message.client.user);
 
