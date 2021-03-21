@@ -33,7 +33,7 @@ describe('test skip command', ()=>{
     });
 
     test('TC-FR: skip 1 song', ()=>{
-        skip(msg);
+        skip(msg, []);
         server = client.servers.get(1234);
         expect(server.waiting_list.length).toBe(1);
         expect(server.waiting_list[0].title).toBe("Frozen");
@@ -41,9 +41,9 @@ describe('test skip command', ()=>{
     });
 
     test('TC-FR: skip 2 songs', ()=>{
-        skip(msg);
+        skip(msg, []);
         expect(channel.content).toBe("TestUser1 - ⏭️ skipped Jingle Bell");
-        skip(msg);
+        skip(msg, []);
         expect(channel.content).toBe("TestUser1 - ⏭️ skipped Frozen");
         expect(client.servers.get(1234).waiting_list.length).toBe(0);
     });

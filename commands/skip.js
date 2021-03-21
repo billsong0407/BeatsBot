@@ -27,7 +27,7 @@ module.exports = {
             return message.channel.send(check).catch(console.error);
 
         const current_server = message.client.servers.get(message.guild.id);
-        if (!args){
+        if (!args.length){
             song = current_server.waiting_list[0];
             current_server.playing = true;
             current_server.connection.dispatcher.end(); 
