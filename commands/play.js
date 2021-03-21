@@ -6,6 +6,7 @@ const { create_song } = require('../utility/song');
 async function play(msg){
   var server = msg.client.servers.get(msg.guild.id);
   if (!server.waiting_list) return;
+  if (!server.playing) return;
   
   const dispatcher = server.connection
     .play(ytdl(server.waiting_list[0].url, {filter: "audioonly"}))
