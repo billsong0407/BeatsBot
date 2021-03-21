@@ -8,6 +8,9 @@ module.exports = {
             dispatcher: {
                 end(){
                     server.waiting_list.shift();
+                },
+                setVolumeLogarithmic(){
+                    return;
                 }
             }
         };
