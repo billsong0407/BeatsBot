@@ -109,7 +109,19 @@ async function play(msg){
         .catch(console.error);
       break;
 
-    
+    case "🔇":
+      reaction.users.remove(user).catch(console.error);
+      if (server.volume <= 0) {
+        server.volume = 100;
+        server.connection.dispatcher.setVolumeLogarithmic(100 / 100);
+        server.text_channel.send(`${user} 🔊 unmuted the music!`).catch(console.error);
+      } else {
+        server.volume = 0;
+        server.connection.dispatcher.setVolumeLogarithmic(0);
+        server.text_channel.send(`${user} 🔇 muted the music!`).catch(console.error);
+      }
+      break;
+
     case "⏹":
       reaction.users.remove(user).catch(console.error);
       server.waiting_list = [];
