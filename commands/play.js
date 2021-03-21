@@ -88,6 +88,28 @@ async function play(msg){
       server.text_channel.send(`Loop is now ${server.loop ? "**on**" : "**off**"}`).catch(console.error);
       break;
 
+    case "🔉":
+      reaction.users.remove(user).catch(console.error);
+      if (!canModifyQueue(member) || server.volume == 0) return;
+      if (server.volume - 10 <= 0) server.volume = 0;
+      else server.volume = server.volume - 10;
+      server.connection.dispatcher.setVolumeLogarithmic(server.volume / 100);
+      server.textChannel
+        .send(`${user} 🔉 decreased the volume, the volume is now ${server.volume}%`)
+        .catch(console.error);
+      break;
+
+    case "🔊":
+      reaction.users.remove(user).catch(console.error);
+      if (server.volume + 10 >= 100) server.volume = 100;
+      else server.volume = queue.volume + 10;
+      server.connection.dispatcher.setVolumeLogarithmic(server.volume / 100);
+      server.text_channel
+        .send(`${user} 🔊 increased the volume, the volume is now ${server.volume}%`)
+        .catch(console.error);
+      break;
+
+    
     case "⏹":
       reaction.users.remove(user).catch(console.error);
       server.waiting_list = [];
