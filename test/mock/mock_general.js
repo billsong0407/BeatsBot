@@ -4,7 +4,7 @@ const Client = {
 }
 
 const Guild ={
-    id: 1234
+    id: 1234,
 }
 
 const TextChannel = {
@@ -12,7 +12,7 @@ const TextChannel = {
     content: null,
     send(content){
         this.content = content;
-    }
+    },
 }
 
 const Message = {
@@ -23,6 +23,9 @@ const Message = {
     channel: null,
     author: "TestUser1",
     reply(content){
+        this.channel.content = content;
+    },
+    catch(content){
         this.channel.content = content;
     }
 }

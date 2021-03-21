@@ -3,6 +3,7 @@ module.exports = {
         const server = {};
         server.text_channel = msg.channel;
         server.channel = msg.member.voice.channel;
+        server.waiting_list = [];
         server.connection = {
             dispatcher: {
                 end(){
@@ -10,7 +11,6 @@ module.exports = {
                 }
             }
         };
-        server.waiting_list = [];
         server.loop = false;
         server.volume = 100;
         server.playing = true;

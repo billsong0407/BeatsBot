@@ -27,8 +27,7 @@ module.exports = {
             return message.channel.send(check).catch(console.error);
 
         const current_server = message.client.servers.get(message.guild.id);
-
-        if (!args.length){
+        if (!args){
             song = current_server.waiting_list[0];
             current_server.playing = true;
             current_server.connection.dispatcher.end(); 
@@ -36,13 +35,12 @@ module.exports = {
         }else{
             if (isNaN(args[0]))
                 return message
-                    .reply("Error: Please enter an integer after $skip")
-                    .catch(console.error);
+                    .reply("Error: Please enter an integer after $skip");
             if (args[0] > current_server.waiting_list.length)
-                return message.reply(`The queue is only ${current_server.waiting_list.length} songs long!`).catch(console.error);
+                return message.reply(`The queue is only ${current_server.waiting_list.length} songs long!`);
 
             skip_to(current_server, args[0]);
-            current_server.text_channel.send(`${message.author} ⏭ skipped ${args[0] - 1} songs`).catch(console.error);
+            return current_server.text_channel.send(`${message.author} - ⏭ skipped ${args[0] - 1} songs`);
         }
     },
 };
