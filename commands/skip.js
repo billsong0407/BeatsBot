@@ -4,11 +4,11 @@ function skip_to(server, index){
     server.playing = true;
 
     if (server.loop) {
-        for (let i = 0; i < index - 2; i++) {
+        for (let i = 0; i < index - 1; i++) {
             server.waiting_list.push(server.waiting_list.shift());
         }
-        } else {
-        server.waiting_list = server.waiting_list.slice(index - 2);
+    } else {
+        if (index >= 2) server.waiting_list = server.waiting_list.slice(index - 1);
     }
 
     server.connection.dispatcher.end();  
@@ -40,7 +40,7 @@ module.exports = {
                 return message.reply(`The queue is only ${current_server.waiting_list.length} songs long!`);
 
             skip_to(current_server, args[0]);
-            return current_server.text_channel.send(`${message.author} - ⏭ skipped ${args[0] - 1} songs`);
+            return current_server.text_channel.send(`${message.author} - ⏭ skipped ${args[0]} songs`);
         }
     },
 };

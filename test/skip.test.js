@@ -52,8 +52,8 @@ describe('test skip command', ()=>{
         msg.client.servers.get(msg.guild.id).waiting_list.push(create_song("Diamond", "h1", 30));
         skip(msg, [2]);
         server = client.servers.get(1234);
-        expect(client.servers.get(1234).waiting_list.length).toBe(2);
-        expect(channel.content).toBe("TestUser1 - ⏭ skipped 1 songs");
+        expect(client.servers.get(1234).waiting_list.length).toBe(1);
+        expect(channel.content).toBe("TestUser1 - ⏭ skipped 2 songs");
     });
 
     test('TC-FRE: input index > queue length', ()=>{

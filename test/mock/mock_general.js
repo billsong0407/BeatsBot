@@ -25,9 +25,6 @@ const Message = {
     reply(content){
         this.channel.content = content;
     },
-    catch(content){
-        this.channel.content = content;
-    }
 }
 
 const Member = {
