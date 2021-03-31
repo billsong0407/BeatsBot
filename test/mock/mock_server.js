@@ -11,6 +11,14 @@ module.exports = {
                 },
                 setVolumeLogarithmic(){
                     return;
+                },
+                pause(){
+                    server.playing=false;
+                    return;
+                },
+                resume(){
+                    server.playing=true;
+                    return;
                 }
             }
         };

@@ -12,11 +12,15 @@ module.exports = {
       return message.channel.send(check).catch(console.error);
     const current_server = message.client.servers.get(message.guild.id);
 
-    if (!current_server.playing) {
-      current_server.playing = true;
-      current_server.connection.dispatcher.resume();
-      return current_server.text_channel.send(`${message.author} - ▶️ resumed the music!`).catch(console.error);
-    }
-    return message.reply("The music is still playing.").catch(console.error);
+    try {
+      if (!current_server.playing) {
+        current_server.playing = true;
+        current_server.connection.dispatcher.resume();
+        return current_server.text_channel.send(`${message.author} - ▶️ resumed the music!`);
+      }
+      return message.reply("The music is still playing.");
+    } catch (error) {
+      return current_server.text_channel.send(error);
+    } 
   }
 };
