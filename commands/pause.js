@@ -15,7 +15,11 @@ module.exports = {
     if (current_server.playing) {
       current_server.playing = false;
       current_server.connection.dispatcher.pause(true);
-      return current_server.text_channel.send(`${message.author} - ⏸ paused the music.`).catch(console.error);
+      try {
+        return current_server.text_channel.send(`${message.author} - ⏸ paused the music.`)
+      } catch (error) {
+        return current_server.text_channel.send(error);
+      }
     }
   }
 };
