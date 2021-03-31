@@ -20,6 +20,10 @@ module.exports = {
     }
     current_server.waiting_list = queue;
     message.client.servers.set(message.guild.id, current_server);
-    current_server.text_channel.send(`${message.author} 🔀 shuffled the queue`).catch(console.error);
+    try {
+      return current_server.text_channel.send(`${message.author} - 🔀 shuffled the queue`)
+    } catch (error) {
+      current_server.text_channel.send(err)
+    }
   }
 };
