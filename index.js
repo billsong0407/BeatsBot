@@ -18,7 +18,7 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () =>{
-    console.log(`${client.user.username} is online!`);
+    console.log(`BeatsBot is online!`);
     client.user.setActivity(`${PREFIX}help and ${PREFIX}play`, { type: "LISTENING" });
 });
 
@@ -29,12 +29,12 @@ client.on('message', async(msg) => {
   const command = args.shift().toLowerCase();
   console.info(`Called command: ${command}`);
   
-  if (!client.commands.has(command)) return;
+  if (!client.commands.has(command)) return msg.reply('Command not found!');
 
   try {
     client.commands.get(command).execute(msg, args);
   } catch (error) {
     console.error(error);
-    msg.reply('there was an error trying to execute that command!');
+    msg.reply('There was an error trying to execute that command!');
   }
 });
