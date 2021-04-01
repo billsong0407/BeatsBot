@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 let config;
 
 try {
@@ -7,14 +9,11 @@ try {
 }
 
 module.exports = {
-    TOKEN: config.TOKEN,
-    PREFIX: config.PREFIX,
-    YOUTUBE_API_KEY: config.YOUTUBE_API_KEY,
-    SOUNDCLOUD_CLIENT_ID: config.SOUNDCLOUD_CLIENT_ID,
-    MAX_PLAYLIST_SIZE: config.MAX_PLAYLIST_SIZE,
-    PRUNING: config.PRUNING,
-    STAY_TIME: config.STAY_TIME,
-    DEFAULT_VOLUME: config.DEFAULT_VOLUME,
+    TOKEN: config ? config.TOKEN : process.env.TOKEN,
+    PREFIX: config ? config.PREFIX : process.env.PREFIX,
+    PRUNING: config ? config.PRUNING : process.env.PRUNING,
+    STAY_TIME: config ? config.STAY_TIME : process.env.STAY_TIME | 0,
+    DEFAULT_VOLUME: config ? config.DEFAULT_VOLUME: process.env.DEFAULT_VOLUME | 0,
 };
 // exports.TOKEN = config.TOKEN;
 // exports.PREFIX = config ? config.PREFIX : process.env.PREFIX;
