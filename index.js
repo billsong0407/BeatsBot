@@ -6,7 +6,7 @@ const { TOKEN, PREFIX } = require("./utility/util");
 const Discord = require('discord.js');
 const client = new Client();
 
-client.login(TOKEN)
+client.login(process.env.TOKEN)
 client.commands = new Collection();
 client.servers = new Map();
 
