@@ -58,11 +58,11 @@ describe('test skip command', ()=>{
 
     test('TC-FRE: input index > queue length', ()=>{
         skip(msg, [10]);
-        expect(channel.content).toBe("The queue is only 2 songs long!");
+        expect(channel.content).toBe(" - ⚠️ The queue only has 2 songs!");
     });
 
     test('TC-FRE: input index is not a number', ()=>{
         skip(msg, ["hi"]);
-        expect(channel.content).toBe("Error: Please enter an integer after $skip");
+        expect(channel.content).toBe(" - ⚠️ Please enter an integer after $skip");
     });
 })

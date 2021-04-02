@@ -3,6 +3,7 @@ const { validate_queue } = require("../utility/validation")
 
 module.exports = {
   name: "nowplaying",
+  cooldown: 10,
   description: "Show the current playing song",
   execute(message) {
     let check = validate_queue(message);

@@ -31,26 +31,26 @@ describe('test skip command', ()=>{
 
     test('TC-FR: change volume to 80%', ()=>{
         volume(msg, [80]);
-        expect(channel.content).toBe("Volume is adjusted to: **80%**");
+        expect(channel.content).toBe(" - 🎧 Volume is adjusted to: **80%**");
     });
 
     test('TC-FR: change volume to 20%', ()=>{
         volume(msg, [20]);
-        expect(channel.content).toBe("Volume is adjusted to: **20%**");
+        expect(channel.content).toBe(" - 🎧 Volume is adjusted to: **20%**");
     });
 
     test('TC-FR: check current volume', ()=>{
         volume(msg, []);
-        expect(channel.content).toBe("🔊 The current volume is: **100%**");
+        expect(channel.content).toBe(" - 🎧 The current volume is: **100%**");
     });
 
     test('TC-FRE: input volume is not a number', ()=>{
         volume(msg, ["e"]);
-        expect(channel.content).toBe("Please enter a number to set the volume");
+        expect(channel.content).toBe(" - ⚠️ Please enter a number to set the volume");
     });
 
     test('TC-FRE: input volume < 0', ()=>{
         volume(msg, [-1]);
-        expect(channel.content).toBe("Please enter a number between 0 - 100");
+        expect(channel.content).toBe(" - ⚠️ Please enter a number between 0 - 100");
     });
 })

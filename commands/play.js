@@ -227,7 +227,7 @@ module.exports = {
     if (current_server) {
       current_server.waiting_list.push(song);
       return current_server.text_channel
-      .send(`🎶 **${song.title}** has been added to the queue by ${message.author}`)
+      .send(`**${song.title}** has been added to the queue by ${message.author}`)
       .catch(console.error);
     }else{
       server = create_server(message);
@@ -243,7 +243,7 @@ module.exports = {
       console.error(error);
       message.client.servers.delete(message.guild.id);
       await channel.leave();
-      return message.channel.send(` - ❌ Could not join the channel: ${error}`).catch(console.error);
+      return message.reply(` - ❌ Could not join the channel: ${error}`).catch(console.error);
     }
   },
 };

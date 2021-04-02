@@ -18,9 +18,9 @@ module.exports = {
         current_server.connection.dispatcher.resume();
         return current_server.text_channel.send(`${message.author} - ▶️ resumed the music!`);
       }
-      return message.reply("The music is still playing.");
+      return message.reply(" - ⚠️ The music is still playing.");
     } catch (error) {
-      return current_server.text_channel.send(error);
+      throw error;
     } 
   }
 };

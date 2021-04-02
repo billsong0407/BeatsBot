@@ -8,7 +8,7 @@ module.exports = {
     let days = Math.floor(hours / 24);
 
     return message
-      .reply(`Uptime: \`${days} day(s),${hours %= 24} hours, ${minutes %= 60} minutes, ${seconds %= 60} seconds\``)
+      .reply(`- 🕰 Uptime: \`${days} day(s),${hours %= 24} hours, ${minutes %= 60} minutes, ${seconds %= 60} seconds\``)
       .catch(console.error);
   }
 };

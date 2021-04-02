@@ -15,13 +15,13 @@ module.exports = {
 
     const current_server = message.client.servers.get(message.guild.id);
 
-    const embed = list_each_song(message, current_server.waiting_list);
+    const embed = list_each_song(current_server.waiting_list);
 
     return message.channel.send(embed);
   }
 };
 
-function list_each_song(message, queue) {
+function list_each_song(queue) {
     let j = 0;
     const info = queue.map((song) => `${++j} - [${song.title}](${song.url})`).join("\n");
 

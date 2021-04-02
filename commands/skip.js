@@ -34,10 +34,9 @@ module.exports = {
             return current_server.text_channel.send(`${message.author} - ⏭️ skipped ${song.title}`);
         }else{
             if (isNaN(args[0]))
-                return message
-                    .reply("Error: Please enter an integer after $skip");
+                return message.reply(" - ⚠️ Please enter an integer after $skip");
             if (args[0] > current_server.waiting_list.length)
-                return message.reply(`The queue is only ${current_server.waiting_list.length} songs long!`);
+                return message.reply(` - ⚠️ The queue only has ${current_server.waiting_list.length} songs!`);
 
             skip_to(current_server, args[0]);
             return current_server.text_channel.send(`${message.author} - ⏭ skipped ${args[0]} songs`);

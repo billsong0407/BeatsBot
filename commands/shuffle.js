@@ -2,6 +2,7 @@ const { validate_queue, validate_voice_channel } = require("../utility/validatio
 
 module.exports = {
   name: "shuffle",
+  cooldown: 10,
   description: "Shuffle queue",
   execute(message) {
     let check = validate_queue(message);
