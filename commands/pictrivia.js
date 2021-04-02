@@ -91,6 +91,7 @@ function randNum(poolLength){
 //main driver (generates a question per play)
 module.exports = {
     name: 'pictrivia',
+    cooldown: 11,
     description: 'artist trivia game: guess the artist based on the pictures',
 
     execute(picmessage, args) {
@@ -107,7 +108,7 @@ module.exports = {
         picmessage.channel.send(attachment);
         
         dquiz.ask_question('Guess the artist of the following picture ',picAnswerPool[rNum], picWrongPool[rNum]);
-        dquiz.log_question_container();
+        // dquiz.log_question_container();
         dquiz.trivia(picmessage, 10); // Runs the trivia command
         
         

@@ -147,7 +147,7 @@ exports.trivia = function (message, timer) {
                 }
             })
             .catch (collected => {
-                message.channel.send(new Discord.MessageEmbed().setDescription("Times up! ⏰").setColor(RED));
+                message.channel.send(new Discord.MessageEmbed().setDescription(`${message.author}Times up! ⏰`).setColor(RED));
             });
     })
     question_container.pop();

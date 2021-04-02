@@ -89,6 +89,7 @@ function randNum(poolLength){
 //main driver (generates a question per play)
 module.exports = {
     name: 'lyrictrivia',
+    cooldown: 11,
     description: 'lyrics trivia game: guess the song based on the lyrics',
 
     execute(message, args) {
@@ -97,7 +98,7 @@ module.exports = {
 
         message.channel.send('You have 10 seconds to guess the song title of the following piece of lyrics!');
         dquiz.ask_question(questionPool[rNum], answerPool[rNum], wrongPool[rNum]);
-        dquiz.log_question_container();
+        // dquiz.log_question_container();
         dquiz.trivia(message, 10); // Runs the trivia command
         //dquiz.trivia(message, 10, 'ffb7c5'); 
         
