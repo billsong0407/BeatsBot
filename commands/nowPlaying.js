@@ -1,11 +1,12 @@
 const createBar = require("string-progressbar");
 const { validate_queue } = require("../utility/validation")
+const { show_GUI } = require("../utility/GUI");
 
 module.exports = {
   name: "nowplaying",
   cooldown: 10,
   description: "Show the current playing song",
-  execute(message) {
+  async execute(message) {
     let check = validate_queue(message);
     if (check != "success")
       return message.channel.send(check).catch(console.error);
@@ -28,7 +29,7 @@ module.exports = {
 
                 { name: 'Views', value: song.view_count, inline: true },
                 { name: 'Average Rating', value: song.avg_rating, inline: true},
-                { name: 'Length', value: song.duration, inline: true },
+                { name: 'Length(sec)', value: song.duration, inline: true },
 
                 { name: 'Volume', value: server.volume, inline: true },
                 { name: 'Repeat mode', value: server.loop ? 'Yes' : 'No', inline: true },
@@ -44,5 +45,6 @@ module.exports = {
             timestamp: new Date(),
         },
     });
-  }
+    show_GUI(message, server);
+    }
 };
