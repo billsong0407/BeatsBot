@@ -1,8 +1,34 @@
+/**
+ * @file loop.js
+ * @author Bill Song
+ * @description Loop Module (M7) - Loop the current playing song
+ */
+
+/**
+ * @require valid_queue function from validation module
+ * @require validate_voice_channel from validation module 
+ */
 const { validate_queue, validate_voice_channel } = require("../utility/validation")
 
+/**
+ * @exports Loop
+ * @description Loop Module (M7)
+ */ 
 module.exports = {
+  /** 
+   * @typedef {Discord.command} Loop
+   * @property {string} name - "loop"
+   * @property {string} description - "Loop the current playing song"
+   * @property {function} execute(message) - loop function
+   */
   name: "loop",
-  description: "Loop the currently playing song",
+  description: "Loop the current playing song",
+
+  /**
+   * @function execute
+   * @param {Discord.message} message - message sent by an user
+   * @description algorithm for looping a song
+  */ 
   execute(message) {
     let check = validate_queue(message);
     if (check != "success")

@@ -1,11 +1,38 @@
+/**
+ * @file nowPlaying.js
+ * @author Bill Song
+ * @description NowPlaying Module (M10) - Show the current playing song
+ */
+
+/**
+ * @require - createBar function from string-progressbar
+ * @require - validate_queue from validation module 
+ * @require - show_GUI from GUI module
+ */
 const createBar = require("string-progressbar");
 const { validate_queue } = require("../utility/validation")
 const { show_GUI } = require("../utility/GUI");
 
+/**
+ * @exports NowPlaying
+ * @description NowPlaying Module (M10)
+ */ 
 module.exports = {
+  /** 
+   * @typedef {Discord.command} NowPlaying
+   * @property {string} name - "nowplaying"
+   * @property {string} description - "Show the current playing song"
+   * @property {function} execute(message) - nowplaying function
+   */
   name: "nowplaying",
   cooldown: 10,
   description: "Show the current playing song",
+
+  /**
+   * @function execute
+   * @param {Discord.message} message - message sent by an user
+   * @description algorithm for showing the current playing song
+  */ 
   async execute(message) {
     let check = validate_queue(message);
     if (check != "success")
@@ -14,8 +41,9 @@ module.exports = {
     const server = message.client.servers.get(message.guild.id);
 
     const song = server.waiting_list[0];
-    const seek = (server.connection.dispatcher.streamTime - server.connection.dispatcher.pausedTime) / 1000;
-    const time_left = song.duration - seek;
+    // calculate the current position in the song in terms of time
+    const seek = (server.connection.dispatcher.streamTime - server.connection.dispatcher.pausedTime) / 1000; 
+    const time_left = song.duration - seek; // calculate the amount of time left
 
     message.channel.send({
         embed: {
