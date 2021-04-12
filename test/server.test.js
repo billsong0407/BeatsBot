@@ -10,5 +10,5 @@ test("test song object construction", () => {
     msg.member.voice = voice;
     server = create_server(msg);
     expect(server.text_channel).toBe(null);
-    expect(server.volume).toBe(100);
+    expect(server.volume).toBe(50);
 });
