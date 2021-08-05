@@ -1,4 +1,4 @@
 # BeatsBot
- An Discord AI that plays music and muscial-related games in a Discord channel
+An Discord AI that plays music and musical-related games in a Discord channel.
 
-Built with Node.js, tested with Jest framework
+Built with Node.js, Tested with Jest, Deployed on Heroku.
