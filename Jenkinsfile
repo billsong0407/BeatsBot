@@ -1,17 +1,17 @@
 pipeline {
-  agent any
+  agent any 
+  environment {
+      MANAGER = 'npm' 
+      DEPLOY = 'heroku'
+  }
+  tools {
+    nodejs "NODEJS"
+  }
   stages {
-    stage('Build') {
-      steps {
-        sh 'npm install'
-      }
+    stage('build'){
+        steps{
+            sh "${MANAGER} install"
+        }
     }
-
-    stage('Test') {
-      steps {
-        sh 'npm test'
-      }
-    }
-
   }
 }
