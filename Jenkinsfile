@@ -1,24 +1,35 @@
 pipeline {
   agent any
+
+  tools {
+    nodejs 'NODEJS'
+  }
+
+  environment {
+    MANAGER = 'npm'
+    DEPLOY = 'heroku'
+  }
+
   stages {
-    stage('build') {
+    stage('Config') {
       steps {
         sh "${MANAGER} install jest"
       }
     }
-
-    stage('test') {
+    stage('Test') {
       steps {
-        sh 'npm test'
+        sh "${MANAGER} test"
       }
     }
-
-  }
-  tools {
-    nodejs 'NODEJS'
-  }
-  environment {
-    MANAGER = 'npm'
-    DEPLOY = 'heroku'
+    stage('Build'){
+      steps {
+        sh "node index.js"
+      }
+    }
+    stage('Deploy'){
+      steps {
+        sh "${DEPLOY} deploy"
+      }
+    }
   }
 }
