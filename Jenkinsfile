@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        sh "${MANAGER} install"
+        sh "${MANAGER} install jest"
       }
     }
 
